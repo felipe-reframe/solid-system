@@ -11,6 +11,18 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { COLOR_PALETTES } from "@/lib/palettes";
 
+// ─── Safe JSON helper ─────────────────────────────────────────────────────────
+
+/** Parse response as JSON; if the body is non-JSON (e.g. HTML 500 page), returns null. */
+async function safeJson(res: Response): Promise<unknown> {
+  const ct = res.headers.get("content-type") ?? "";
+  if (!ct.includes("application/json")) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`Server error (HTTP ${res.status})${text ? `: ${text.slice(0, 120)}` : ""}`);
+  }
+  return res.json();
+}
+
 // ─── Shared types ─────────────────────────────────────────────────────────────
 
 export interface PlaceResult {
@@ -543,10 +555,10 @@ export default function Home() {
     setBuildingTypesLoading(true);
     fetch("/api/drive/folders")
       .then(async (res) => {
-        const json = await res.json();
+        const json = await safeJson(res) as { folders?: { id: string; name: string }[] };
         if (cancelled) return;
         if (res.ok && Array.isArray(json.folders)) {
-          const types = (json.folders as { id: string; name: string }[]).map(
+          const types = json.folders.map(
             (f) => ({ value: f.name, label: f.name })
           );
           setBuildingTypes(types);
@@ -555,7 +567,7 @@ export default function Home() {
           );
         }
       })
-      .catch((err) => console.error("[buildingTypes]", err))
+      .catch((err: Error) => { if (!cancelled) setBuildingTypesLoading(false); console.warn("[buildingTypes]", err.message); })
       .finally(() => { if (!cancelled) setBuildingTypesLoading(false); });
     return () => { cancelled = true; };
   }, [isSignedIn]);
@@ -579,10 +591,10 @@ export default function Home() {
     setDriveLoading(true); setDriveError(null); setDriveData(null);
     fetch(`/api/drive?buildingType=${encodeURIComponent(settings.buildingType)}`)
       .then(async (res) => {
-        const json = await res.json();
+        const json = await safeJson(res) as Record<string, unknown>;
         if (cancelled) return;
-        if (!res.ok) setDriveError(json.error ?? "Unknown Drive error.");
-        else setDriveData(json as DriveData);
+        if (!res.ok) setDriveError((json.error as string) ?? "Unknown Drive error.");
+        else setDriveData(json as unknown as DriveData);
       })
       .catch((err: Error) => { if (!cancelled) setDriveError(err.message); })
       .finally(() => { if (!cancelled) setDriveLoading(false); });
@@ -596,10 +608,10 @@ export default function Home() {
     setZoningLoading(true); setZoningError(null); setZoningData(null);
     fetch(`/api/zoning?address=${encodeURIComponent(selectedPlace.address)}`)
       .then(async (res) => {
-        const json = await res.json();
+        const json = await safeJson(res) as Record<string, unknown>;
         if (cancelled) return;
-        if (!res.ok) setZoningError(json.error ?? "Unknown zoning error.");
-        else setZoningData(json as ZoningData);
+        if (!res.ok) setZoningError((json.error as string) ?? "Unknown zoning error.");
+        else setZoningData(json as unknown as ZoningData);
       })
       .catch((err: Error) => { if (!cancelled) setZoningError(err.message); })
       .finally(() => { if (!cancelled) setZoningLoading(false); });
@@ -624,12 +636,12 @@ export default function Home() {
       }),
     })
       .then(async (res) => {
-        const json = await res.json();
+        const json = await safeJson(res) as Record<string, unknown>;
         if (cancelled) return;
         if (!res.ok) {
-          const detail = json.detail ? ` — ${json.detail}` : "";
-          setRenderError((json.error ?? "Unknown render error.") + detail);
-        } else setRenderData(json as RenderData);
+          const detail = json.detail ? ` — ${json.detail as string}` : "";
+          setRenderError(((json.error as string) ?? "Unknown render error.") + detail);
+        } else setRenderData(json as unknown as RenderData);
       })
       .catch((err: Error) => { if (!cancelled) setRenderError(err.message); })
       .finally(() => { if (!cancelled) setRenderLoading(false); });

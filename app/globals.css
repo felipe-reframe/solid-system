@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Reframe Systems Brand Identity 2025 ── */
+    /* Primary Green: #0DAB4A  |  Dark Blue: #002026 */
+
+    /* Background: Reframe Dark Blue #002026 → hsl(190, 100%, 7%) */
+    --background: 190 100% 7%;
+    --foreground: 0 0% 92%;
+
+    /* Cards: slightly lifted surface above the dark base */
+    --card: 190 70% 10%;
+    --card-foreground: 0 0% 92%;
+
+    --popover: 190 70% 10%;
+    --popover-foreground: 0 0% 92%;
+
+    /* Primary: Reframe Primary Green #0DAB4A → hsl(143, 86%, 36%) */
+    --primary: 143 86% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: dark teal surface */
+    --secondary: 190 60% 14%;
+    --secondary-foreground: 0 0% 92%;
+
+    /* Muted */
+    --muted: 190 45% 13%;
+    --muted-foreground: 190 20% 55%;
+
+    /* Accent: hover/interactive surface */
+    --accent: 190 55% 16%;
+    --accent-foreground: 0 0% 92%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 92%;
+
+    /* Borders & inputs */
+    --border: 190 35% 20%;
+    --input: 190 35% 20%;
+
+    /* Focus ring: Reframe Primary Green */
+    --ring: 143 86% 36%;
+
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* ─── Google Maps Places Autocomplete dropdown ─── */
+.pac-container {
+  background-color: hsl(190, 70%, 10%);
+  border: 1px solid hsl(190, 35%, 20%);
+  border-radius: 0.625rem;
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.7);
+  margin-top: 6px;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.pac-item {
+  color: hsl(190, 20%, 70%);
+  padding: 0.625rem 1rem;
+  border-top: 1px solid hsl(190, 35%, 16%);
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.pac-item:first-child {
+  border-top: none;
+}
+
+.pac-item:hover,
+.pac-item-selected {
+  background-color: hsl(190, 55%, 16%);
+}
+
+.pac-item-query {
+  color: hsl(0, 0%, 92%);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.pac-matched {
+  color: hsl(143, 86%, 45%);
+  font-weight: 600;
+}
+
+.pac-icon {
+  display: none;
+}
+
+/* Hide the "Powered by Google" logo inside the dropdown
+   (the logo still shows in the input area per Google TOS) */
+.hdpi.pac-logo::after,
+.pac-logo::after {
+  display: none;
+}
