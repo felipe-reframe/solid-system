@@ -1,0 +1,42 @@
+<svg viewBox="0 0 200 190" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Reframe Systems mark">
+  <!--
+    Reframe Systems logo mark.
+    Three organic rounded shapes in Reframe Primary Green (#0DAB4A)
+    arranged around a triangular white negative space.
+  -->
+
+  <!-- Left piece: large rounded organic shape (dominant, left two-thirds) -->
+  <path
+    d="M 90 6
+       C 54 4 16 30 7 66
+       C -1 98 10 134 34 156
+       C 56 176 86 181 108 167
+       C 122 157 126 140 115 122
+       C 106 108 95 93 99 75
+       C 103 58 116 50 110 28
+       C 105 12 97 6 90 6 Z"
+    fill="#0DAB4A"
+  />
+
+  <!-- Top-right piece: rounded sector / arc wing -->
+  <path
+    d="M 114 6
+       C 140 3 174 18 185 46
+       C 194 68 190 95 174 107
+       C 162 116 146 114 136 102
+       C 127 91 125 74 126 58
+       C 127 40 122 18 114 6 Z"
+    fill="#0DAB4A"
+  />
+
+  <!-- Bottom-right piece: elongated curved horn -->
+  <path
+    d="M 123 116
+       C 144 110 170 116 182 133
+       C 193 148 192 169 180 180
+       C 168 191 150 192 139 184
+       C 128 176 124 161 124 146
+       C 124 133 123 123 123 116 Z"
+    fill="#0DAB4A"
+  />
+</svg>
